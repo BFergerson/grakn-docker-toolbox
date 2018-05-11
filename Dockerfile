@@ -31,6 +31,8 @@ WORKDIR /opt/grakn-dist-${GRAKN_VERSION}
 #VOLUME ["/opt/grakn-dist-${GRAKN_VERSION}/conf", "/opt/grakn-dist-${GRAKN_VERSION}/logs"]
 
 EXPOSE 4567
+EXPOSE 9042
+EXPOSE 9160
 
 RUN echo "./grakn server start" >> /etc/bash.bashrc
 ENTRYPOINT ["/bin/bash"]

@@ -28,6 +28,8 @@ RUN mkdir -p /opt && \
 
 WORKDIR /opt/grakn-dist-${GRAKN_VERSION}
 
+COPY cassandra.yaml /opt/grakn-dist-${GRAKN_VERSION}/services/cassandra
+
 #VOLUME ["/opt/grakn-dist-${GRAKN_VERSION}/conf", "/opt/grakn-dist-${GRAKN_VERSION}/logs"]
 
 EXPOSE 4567

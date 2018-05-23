@@ -1,40 +1,29 @@
 #
 # Grakn Dockerfile
 #
-# https://github.com/bfergerson/grakn-dockerfile
+# https://github.com/bfergerson/grakn-docker-toolbox
 #
-FROM ubuntu
-RUN apt-get update && apt-get install -y software-properties-common
-#RUN apt-get update && apt-get install -y iputils-ping
-#RUN apt-get install nano
+FROM openjdk:8-jdk
 
-RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  add-apt-repository -y ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -y oracle-java8-installer && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer
+LABEL maintainer="github.com/bfergerson"
 
-MAINTAINER github.com/bfergerson
+ARG GRAKN_VERSION=1.2.0
 
-ENV GRAKN_VERSION=1.2.0
+ENV GRAKN_HOME=/opt/grakn
 
-ADD https://github.com/graknlabs/grakn/releases/download/v${GRAKN_VERSION}/grakn-dist-${GRAKN_VERSION}.tar.gz /tmp
+RUN mkdir -p $GRAKN_HOME && \
+    curl -sSL https://github.com/graknlabs/grakn/releases/download/v${GRAKN_VERSION}/grakn-dist-${GRAKN_VERSION}.tar.gz | \
+    tar -C $GRAKN_HOME --strip-components=1 -xzv
 
-RUN mkdir -p /opt && \
-    tar -C /opt -xvf /tmp/grakn-dist-${GRAKN_VERSION}.tar.gz && \
-    rm -f /tmp/grakn-dist-${GRAKN_VERSION}.tar.gz
+ENV PATH=$PATH:$GRAKN_HOME
+WORKDIR $GRAKN_HOME
 
-WORKDIR /opt/grakn-dist-${GRAKN_VERSION}
+COPY cassandra.yaml $GRAKN_HOME/services/cassandra
+COPY docker-entrypoint /usr/local/bin
 
-COPY cassandra.yaml /opt/grakn-dist-${GRAKN_VERSION}/services/cassandra
-
-#VOLUME ["/opt/grakn-dist-${GRAKN_VERSION}/conf", "/opt/grakn-dist-${GRAKN_VERSION}/logs"]
-
+# Grakn Server
 EXPOSE 4567
-EXPOSE 9042
-EXPOSE 9160
+# Grakn gRPC
+EXPOSE 48555
 
-RUN echo "./grakn server start" >> /etc/bash.bashrc
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT [ "docker-entrypoint" ]

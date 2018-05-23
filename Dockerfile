@@ -23,6 +23,8 @@ COPY docker-entrypoint /usr/local/bin
 
 # Grakn Server
 EXPOSE 4567
+# Thrift client API
+EXPOSE 9160
 # Grakn gRPC
 EXPOSE 48555
 

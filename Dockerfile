@@ -12,8 +12,8 @@ ARG GRAKN_VERSION=1.4.2
 ENV GRAKN_HOME=/opt/grakn
 
 RUN mkdir -p $GRAKN_HOME && \
-    curl -sSL https://github.com/graknlabs/grakn/releases/download/v${GRAKN_VERSION}/grakn-dist-${GRAKN_VERSION}.tar.gz | \
-    tar -C $GRAKN_HOME --strip-components=1 -xzv
+    wget https://github.com/graknlabs/grakn/releases/download/v${GRAKN_VERSION}/grakn-core-${GRAKN_VERSION}.zip && \
+    unzip grakn-core-${GRAKN_VERSION}.zip -d $GRAKN_HOME && cp -Rf $GRAKN_HOME/grakn-core-${GRAKN_VERSION}/* $GRAKN_HOME
 
 ENV PATH=$PATH:$GRAKN_HOME
 WORKDIR $GRAKN_HOME

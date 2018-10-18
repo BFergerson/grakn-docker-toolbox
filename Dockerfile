@@ -7,7 +7,7 @@ FROM openjdk:8-jdk
 
 LABEL maintainer="github.com/bfergerson"
 
-ARG GRAKN_VERSION=1.3.0
+ARG GRAKN_VERSION=1.4.2
 
 ENV GRAKN_HOME=/opt/grakn
 

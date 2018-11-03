@@ -19,7 +19,7 @@ ENV PATH=$PATH:$GRAKN_HOME
 WORKDIR $GRAKN_HOME
 
 COPY cassandra.yaml $GRAKN_HOME/services/cassandra
-COPY docker-entrypoint /usr/local/bin
+COPY grakn-docker-entrypoint /usr/local/bin
 
 # Grakn Server
 EXPOSE 4567
@@ -28,4 +28,4 @@ EXPOSE 9160
 # Grakn gRPC
 EXPOSE 48555
 
-ENTRYPOINT [ "docker-entrypoint" ]
+ENTRYPOINT [ "grakn-docker-entrypoint" ]
